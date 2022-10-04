@@ -1,4 +1,4 @@
-import com.googlecode.lanterna.TextCharacter;
+import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
@@ -10,11 +10,12 @@ import java.io.IOException;
 
 public class Game {
     private Screen screen;
-    private Hero hero= new Hero(10,10);
+    private Arena arena = new Arena(40,20);
     public Game() {
         try {
-            Terminal terminal = new
-                    DefaultTerminalFactory().createTerminal();
+            TerminalSize terminalSize = new TerminalSize(40, 20);
+            DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory().setInitialTerminalSize(terminalSize);
+            Terminal terminal = terminalFactory.createTerminal();
             this.screen = new TerminalScreen(terminal);
             this.screen.setCursorPosition(null); // we don't need a cursor
             this.screen.startScreen(); // screens must be started
@@ -26,7 +27,7 @@ public class Game {
     }
     private void draw() throws IOException{
         screen.clear();
-        hero.draw(screen);
+        arena.draw(screen.newTextGraphics());
         screen.refresh();
     }
     public void run() throws IOException{
@@ -40,27 +41,8 @@ public class Game {
         }
     }
     private void processKey(com.googlecode.lanterna.input.KeyStroke key) throws java.io.IOException{
-        switch (key.getKeyType()){
-            case Character: {
-                if (key.getCharacter() == 'q'){
-                    this.screen.close();
-                }
-            }
-            case ArrowDown:{
-                hero.moveDown();
-                break;
-            }
-            case ArrowUp:{
-                hero.moveUp();
-                break;
-            }
-            case ArrowLeft :{
-                hero.moveLeft();
-                break;
-            }
-            case ArrowRight :{
-                hero.moveRight();
-            }
-        }
+        if(key.getKeyType()==KeyType.Character && key.getCharacter()=='q')
+            this.screen.close();
+        arena.processKey(key);
     }
 }
