@@ -1,11 +1,10 @@
 import com.googlecode.lanterna.SGR;
 import com.googlecode.lanterna.TerminalPosition;
-import com.googlecode.lanterna.TextCharacter;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
-import com.googlecode.lanterna.screen.Screen;
 
 public class Hero extends Element {
+    private Position prevposition= new Position(-1,-1);
     public Hero(int x,int y){
         super(x,y);
     }
@@ -22,12 +21,19 @@ public class Hero extends Element {
         return new Position(position.getX()+1,position.getY());
     }
     public void draw(TextGraphics graphics){
-        graphics.setForegroundColor(TextColor.Factory.fromString("#FFFF33"));
+        graphics.setForegroundColor(TextColor.Factory.fromString("#0018E3"));
         graphics.enableModifiers(SGR.BOLD);
         graphics.putString(new TerminalPosition(position.getX(),position.getY()), "X");
     }
     public void moveHero(Position position){
         this.position=position;
+
+    }
+    public void setPrevposition(Position prevposition) {
+        this.prevposition = prevposition;
     }
 
+    public Position getPrevposition() {
+        return prevposition;
+    }
 }
