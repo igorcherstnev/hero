@@ -76,6 +76,7 @@ public class Arena {
         }
     }
     public void draw(TextGraphics graphics, Progress progress, Health health){
+        verifyMonsterCollision( health);
         graphics.setBackgroundColor(TextColor.Factory.fromString("#000000"));
         graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
         for(Wall wall: walls)
@@ -86,7 +87,6 @@ public class Arena {
             monster.draw(graphics);
         hero.draw(graphics);
         retrieveCoins(progress);
-        verifyMonsterCollision( health);
         health.draw(graphics,width,height);
         progress.draw(graphics,width,height);
     }
